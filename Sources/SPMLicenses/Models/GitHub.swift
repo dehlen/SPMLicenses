@@ -8,9 +8,9 @@ struct GitHubLicense: Decodable {
     let sha: String
     let size: Int
     let url: URL?
-    let htmlUrl: URL?
-    let gitUrl: URL?
-    let downloadUrl: URL
+    let html_url: URL?
+    let git_url: URL?
+    let download_url: URL
     let type: String?
     let content: String?
     let encoding: String?
