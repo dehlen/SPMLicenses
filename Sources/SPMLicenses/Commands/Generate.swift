@@ -48,17 +48,19 @@ struct Generate: ParsableCommand {
                     return try response.get()
                 } catch {
                     print("Could not download license information for \(repository.package.package)")
+                    print(error)
                     return nil
                 }
             }
             .flatMap { license in
-                githubParser.downloadGitHubLicenseFile(url: license.downloadUrl)
+                githubParser.downloadGitHubLicenseFile(url: license.download_url)
                     .compactMap { response -> License? in
                         do {
                             let licenseText = try response.get()
                             return License(packageName: repository.package.package, licenseName: license.license.name, licenseText: licenseText)
                         } catch {
                             print("Could not download license information for \(repository.package.package)")
+                            print(error)
                             return nil
                         }
                     }
