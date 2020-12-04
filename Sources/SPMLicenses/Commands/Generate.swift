@@ -16,7 +16,8 @@ struct Generate: ParsableCommand {
         var cancelSet: Set<AnyCancellable> = []
         
         try exportLicenses()
-            .sink { (completion) in
+            .sinkBlocking
+            { (completion) in
                 switch completion {
                 case .finished:
                     ()
