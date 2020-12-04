@@ -31,12 +31,16 @@ class GitHubParser {
 
         guard let host = url.host,
             host.contains(gitDomain),
-            url.pathComponents.count >= 2,
-            url.pathComponents[url.pathComponents.count - 1].hasSuffix(gitSuffix) else { throw GitHubError.unknownRepository }
-
+            url.pathComponents.count >= 2
+            else { throw GitHubError.unknownRepository }
+        
+        let owner = url.pathComponents[url.pathComponents.count - 2]
+        let name = url.pathComponents[url.pathComponents.count - 1]
+        let nameWithoutSuffix = name.hasSuffix(gitSuffix) ? String(name.dropLast(gitSuffix.count)) : name
+        
         return GitHubRepository(
-            owner: url.pathComponents[url.pathComponents.count - 2],
-            name: String(url.pathComponents[url.pathComponents.count - 1].dropLast(gitSuffix.count))
+            owner: owner,
+            name: nameWithoutSuffix
         )
     }
     
@@ -85,21 +89,19 @@ class GitHubParser {
     func downloadGitHubLicenseFile(session: URLSession = .shared, url: URL) -> AnyPublisher<Result<String, GitHubError>, Never> {
         session.dataTaskPublisher(for: url)
             .retry(2)
-            .mapError { error in GitHubError.requestError(error) }
-            .tryMap { data, response in
+            .map { data, response in
                 guard let httpResponse = response as? HTTPURLResponse,
                     200..<300 ~= httpResponse.statusCode else {
-                    throw GitHubError.invalidResponse(response)
+                    return .failure(.invalidResponse(response))
                 }
-                return data
-            }.decode(type: String.self, decoder: JSONDecoder())
-            .mapError { error in GitHubError.parsingError(error) }
-            .map {
-                return .success($0)
+                
+                guard let licenseText = String(data: data, encoding: .utf8) else {
+                    return .failure(.conversionError)
+                }
+                
+                return .success(licenseText)
             }
-            .catch { error in
-                return Just(.failure(error))
-            }
+            .catch { error in Just(.failure(GitHubError.requestError(error))) }
             .eraseToAnyPublisher()
     }
 }

@@ -6,4 +6,5 @@ enum GitHubError: Error {
     case requestError(Error)
     case invalidResponse(URLResponse)
     case parsingError(Error)
+    case conversionError
 }
