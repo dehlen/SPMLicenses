@@ -1,7 +1,7 @@
 # SPMLicenses
 
 This tool reads your Package.resolved file and generates a json file including all licenses of your third party dependencies, given the dependency is hosted on GitHub. For more information see the blogpost:
-https://dehlen.github.io/blog/swift,/dev/2020/12/24/generating-spm-licenses.html
+https://davidvonk.dev/2020/12/24/generating-spm-licenses.html
 
 Executing the tool is a single call on your command line:
 
@@ -28,7 +28,7 @@ If you want to update the license file on every Xcode build you can add this sim
 2. Add a New Run Script Phase by clicking the little plus icon in the top left and paste in the following script:
 
 ```sh
-if which tribute >/dev/null; then
+if which spm-licenses >/dev/null; then
  spm-licenses <path to .xcworkspace> <output.json> <optional GitHub client id> <optional GitHub client secret>
 else
   echo "warning: SPMLicenses not installed, download from https://github.com/dehlen/SPMLicenses"
