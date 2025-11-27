@@ -24,7 +24,6 @@ class GitHubParser {
         }
     }
     
-    
     func githubRepository(from url: URL) throws -> GitHubRepository {
         let gitDomain = "github.com"
         let gitSuffix = ".git"
@@ -32,7 +31,9 @@ class GitHubParser {
         guard let host = url.host,
             host.contains(gitDomain),
             url.pathComponents.count >= 2
-            else { throw GitHubError.unknownRepository }
+        else {
+            throw GitHubError.unknownRepository
+        }
         
         let owner = url.pathComponents[url.pathComponents.count - 2]
         let name = url.pathComponents[url.pathComponents.count - 1]
