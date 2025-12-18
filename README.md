@@ -1,7 +1,7 @@
 # SPMLicenses
 
 This tool reads your Package.resolved file and generates a json file including all licenses of your third party dependencies, given the dependency is hosted on GitHub. For more information see the blogpost:
-[https://vknobelsdorff.com/2020/12/24/generating-spm-licenses.html](https://vknobelsdorff.de/swift/generating-licenses-for-spm-dependencies/)
+[https://vknobelsdorff.com/2020/12/24/generating-spm-licenses.html](https://vknobelsdorff.com/swift/generating-licenses-for-spm-dependencies/)
 
 Executing the tool is a single call on your command line:
 
